@@ -179,11 +179,45 @@
       box-shadow:var(--shadow-hover), var(--glow);
     }
 
+    /* Search Bar Styles */
+    .search-container {
+      margin: 24px 0;
+      position: relative;
+    }
+    
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      box-shadow: var(--shadow);
+      transition: all .3s ease;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: var(--shadow-hover), var(--glow);
+    }
+    
+    .search-box::placeholder {
+      color: var(--muted);
+    }
+
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
     .project{
       transition: all .4s cubic-bezier(.4,0,.2,1);
       position: relative;
       overflow:hidden;
+      /* FIXED: Consistent height for all cards */
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
     .project:hover{
       transform: translateY(-8px) scale(1.02);
@@ -191,13 +225,15 @@
       border-color:rgba(149,75,246,.3);
     }
     .project .thumb{
-      height:180px;
+      /* FIXED: Consistent thumbnail height */
+      height:200px;
       border-bottom:1px solid rgba(255,255,255,.08);
       border-top-left-radius:var(--radius);
       border-top-right-radius:var(--radius);
       background:#0b0c10 center/cover no-repeat;
       position:relative;
       overflow:hidden;
+      flex-shrink: 0;
     }
     .project .thumb::after{
       content:'';
@@ -211,8 +247,28 @@
       transition:opacity .3s ease;
     }
     .project:hover .thumb::after{opacity:1}
-    .project .content{padding:20px}
-    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .project .content{
+      padding:20px;
+      /* FIXED: Make content area flexible to fill remaining space */
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .project .content h3 {
+      margin-bottom: 8px;
+    }
+    .project .content p {
+      /* FIXED: Consistent description height */
+      flex: 1;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+      min-height: 4.5em; /* 3 lines * 1.5 line-height */
+    }
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
     .badge{
       padding:6px 12px;
       border:1px solid rgba(209,190,243,.3);
@@ -221,6 +277,11 @@
       color:var(--accent2);
       background:rgba(209,190,243,.05);
       font-weight:500;
+    }
+
+    /* Hidden class for search functionality */
+    .hidden {
+      display: none !important;
     }
 
     section{margin:80px 0;position:relative;z-index:10}
@@ -294,7 +355,7 @@
       <div class="card pad fade-in">
         <h1>Midnight Hub</h1>
         <p class="tagline">Variety of unblocked games</p>
-        <p class="muted">Midnight Hub is a simple, downloadable HTML page that gives you easy access to free unblocked games. Just open it in your browser, and you can quickly browse and launch your favorite games all without needing an internet connection or worrying about restrictions. It’s your personal game hub, ready to use anytime.</p>
+        <p class="muted">Midnight Hub is a simple, downloadable HTML page that gives you easy access to free unblocked games. Just open it in your browser, and you can quickly browse and launch your favorite games all without needing an internet connection or worrying about restrictions. It's your personal game hub, ready to use anytime.</p>
         <div style="display:flex;gap:14px;margin-top:18px">
           <a class="btn" href="#projects">View Games</a>
         </div>
@@ -304,195 +365,215 @@
       </div>
     </section>
 
-   <section id="projects">
-  <h2 class="fade-in">Games</h2>
-  <p class="muted fade-in fade-in-delay">All available Midnight games</p>
-  <div class="grid" id="projectGrid">
-    <a class="card project fade-in" href="ULTRAKILL.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/download%20(23).jpeg?updatedAt=1758078434074')"></div>
-      <div class="content">
-        <h3>Ultrakill</h3>
-        <p class="muted">Ultrakill is an upcoming first-person shooter game developed by Arsi "Hakita" Patala and published by New Blood Interactive.</p>
-        <div class="badges">
-          <span class="badge">Shooter</span>
-          <span class="badge">Platformer</span>
-          <span class="badge">Indie</span>
+    <section id="projects">
+      <h2 class="fade-in">Games</h2>
+      <p class="muted fade-in fade-in-delay">All available Midnight games</p>
+      
+      <!-- ADDED: Search functionality -->
+      <div class="search-container fade-in fade-in-delay-2">
+        <input type="text" id="gameSearch" class="search-box" placeholder="Search games..." />
+      </div>
+      
+      <div class="grid" id="projectGrid">
+        <!-- FIXED: Each card now has proper data attributes and consistent structure -->
+        <div class="card project fade-in game-card" data-game="ULTRAKILL.html" data-name="ultrakill" data-tags="shooter platformer indie">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/download%20(23).jpeg?updatedAt=1758078434074')"></div>
+          <div class="content">
+            <h3>Ultrakill</h3>
+            <p class="muted">Ultrakill is an upcoming first-person shooter game developed by Arsi "Hakita" Patala and published by New Blood Interactive.</p>
+            <div class="badges">
+              <span class="badge">Shooter</span>
+              <span class="badge">Platformer</span>
+              <span class="badge">Indie</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay game-card" data-game="10 Minutes Till Dawn.html" data-name="10 minutes till dawn" data-tags="action indie strategy">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/10min-till-dawn.png?updatedAt=1757976163483')"></div>
+          <div class="content">
+            <h3>10 Minutes Till Dawn</h3>
+            <p class="muted">In this roguelite survival game, select from a variety of upgrades to create a unique and overpowered builds every run.</p>
+            <div class="badges">
+              <span class="badge">Action</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Strategy</span>
+              <span class="badge">Website only</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Buckshot Roulette.html" data-name="buckshot roulette" data-tags="horror indie action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/buckshot-roulette.jpg?updatedAt=1757976163622')"></div>
+          <div class="content">
+            <h3>Buckshot Roulette</h3>
+            <p class="muted">Buckshot Roulette is a 2023 indie tabletop horror video game developed and published by Estonian game developer Mike Klubnika on itch.io.</p>
+            <div class="badges">
+              <span class="badge">Horror</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-3 game-card" data-game="Granny.html" data-name="granny" data-tags="horror adventure puzzle">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/granny.webp?updatedAt=1757976162194')"></div>
+          <div class="content">
+            <h3>Granny</h3>
+            <p class="muted">Granny is a horror game where you must escape from a creepy house while avoiding the clutches of a terrifying grandmother.</p>
+            <div class="badges">
+              <span class="badge">Horror</span>
+              <span class="badge">Adventure</span>
+              <span class="badge">Puzzle</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Deltarune.html" data-name="deltarune" data-tags="role-playing indie action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/deltarune-2.jpeg?updatedAt=1758078434063')"></div>
+          <div class="content">
+            <h3>Deltarune</h3>
+            <p class="muted">Deltarune is a role-playing video game created by Toby Fox. It is a follow-up to the critically acclaimed game Undertale and features similar gameplay mechanics.</p>
+            <div class="badges">
+              <span class="badge">Role-playing</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="That's Not My Neighbor.html" data-name="that's not my neighbor" data-tags="simulation indie action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/thats-not0my0neighbor.jpg?updatedAt=1757976162098')"></div>
+          <div class="content">
+            <h3>That's Not My Neighbor</h3>
+            <p class="muted">That's Not My Neighbor is a job simulator with science fiction elements and a slightly eerie aesthetic that will test your sense of observation.</p>
+            <div class="badges">
+              <span class="badge">Simulation</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Hollow Knight.html" data-name="hollow knight" data-tags="metroidvania indie fighting">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/Hollow_Knight.webp?updatedAt=1757976162937')"></div>
+          <div class="content">
+            <h3>Hollow Knight</h3>
+            <p class="muted">Hollow Knight is a critically acclaimed action-adventure game set in a beautifully hand-drawn, dark fantasy world. Players explore the vast, interconnected kingdom of Hallownest.</p>
+            <div class="badges">
+              <span class="badge">Metroidvania</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Fighting</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Endoparasitic.html" data-name="endoparasitic" data-tags="shooter indie adventure blood">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/endoparasitic.jpg?updatedAt=1757976162041')"></div>
+          <div class="content">
+            <h3>Endoparasitic</h3>
+            <p class="muted">Endoparasitic is a unique action-adventure game that combines elements of horror and exploration. Players navigate a surreal world filled with strange creatures.</p>
+            <div class="badges">
+              <span class="badge">Shooter</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Adventure</span>
+              <span class="badge">Blood</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Undertale.html" data-name="undertale" data-tags="adventure indie action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/undertale_LYJRI6wtG.png?updatedAt=1758078434141')"></div>
+          <div class="content">
+            <h3>Undertale</h3>
+            <p class="muted">Undertale is a unique RPG that subverts traditional gameplay mechanics. Players navigate a world filled with quirky characters and moral dilemmas.</p>
+            <div class="badges">
+              <span class="badge">Adventure</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Undertale Yellow.html" data-name="undertale yellow" data-tags="role-playing indie action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/download%20(22).jpeg?updatedAt=1758078434071')"></div>
+          <div class="content">
+            <h3>Undertale Yellow</h3>
+            <p class="muted">Undertale Yellow is a fan-made prequel to Undertale, following the last human who falls into the underground before Frisk, a child named Clover.</p>
+            <div class="badges">
+              <span class="badge">Role-playing</span>
+              <span class="badge">Indie</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Five Nights at Freddy's.html" data-name="five nights at freddy's fnaf" data-tags="horror survival action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/FNaF1.webp?updatedAt=1757976162387')"></div>
+          <div class="content">
+            <h3>Five Nights at Freddy's</h3>
+            <p class="muted">In Five Nights at Freddy's, players must survive the night while being hunted by animatronic characters. Use cameras and limited resources to stay alive.</p>
+            <div class="badges">
+              <span class="badge">Horror</span>
+              <span class="badge">Survival</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Class of '09.html" data-name="class of 09" data-tags="visual novel role-playing gore">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/class-of-09-1sgdv.png')"></div>
+          <div class="content">
+            <h3>Class of 09</h3>
+            <p class="muted">In Class of 09, players navigate a world filled with quirky characters and moral dilemmas, where every choice matters and the outcome is never what it seems.</p>
+            <div class="badges">
+              <span class="badge">Visual novel</span>
+              <span class="badge">Role-playing</span>
+              <span class="badge">Frequent Gore</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Bendy and the Ink Machine.html" data-name="bendy and the ink machine" data-tags="horror survival action">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/download%20(24).jpeg?updatedAt=1758078434133')"></div>
+          <div class="content">
+            <h3>Bendy and the Ink Machine</h3>
+            <p class="muted">In Bendy and the Ink Machine, players must navigate a dark and twisted world filled with ink monsters and puzzles. Uncover the secrets of the studio.</p>
+            <div class="badges">
+              <span class="badge">Horror</span>
+              <span class="badge">Survival</span>
+              <span class="badge">Action</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="cldokidokiliteratureclub (1).html" data-name="doki doki literature club ddlc" data-tags="horror visual novel psychological">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/ddlc.webp?updatedAt=1758235240287')"></div>
+          <div class="content">
+            <h3>Doki Doki Literature Club</h3>
+            <p class="muted">In Doki Doki Literature Club, players join a literature club filled with cute girls, but things quickly take a dark turn in this psychological horror visual novel.</p>
+            <div class="badges">
+              <span class="badge">Horror</span>
+              <span class="badge">Visual novel</span>
+              <span class="badge">Psychological</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card project fade-in fade-in-delay-2 game-card" data-game="Cuphead.html" data-name="cuphead" data-tags="indie action platformer">
+          <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/Cuphead.png?updatedAt=1757976163811')"></div>
+          <div class="content">
+            <h3>Cuphead</h3>
+            <p class="muted">Cuphead is a 2017 indie run and gun game developed and published by Studio MDHR. The game follows its titular teacup-headed character and his brother Mugman.</p>
+            <div class="badges">
+              <span class="badge">Indie</span>
+              <span class="badge">Action</span>
+              <span class="badge">Platformer</span>
+            </div>
+          </div>
         </div>
       </div>
-    </a>
-    <a class="card project fade-in fade-in-delay" href="10 Minutes Till Dawn.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/10min-till-dawn.png?updatedAt=1757976163483')"></div>
-      <div class="content">
-        <h3>10 Minutes Till Dawn</h3>
-        <p class="muted">In this roguelite survival game, select from a variety of upgrades to create a unique and overpowered builds every run.</p>
-        <div class="badges">
-          <span class="badge">Action</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Strategy</span>
-          <span class="badge">Website only</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Buckshot Roulette.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/buckshot-roulette.jpg?updatedAt=1757976163622')"></div>
-      <div class="content">
-        <h3>Buckshot Roulette</h3>
-        <p class="muted">Buckshot Roulette is a 2023 indie tabletop horror video game developed and published by Estonian game developer Mike Klubnika on itch.io. It was released on Steam by Critical Reflex on 4 April 2024 to coincide with a new update.</p>
-        <div class="badges">
-          <span class="badge">Horror</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-3" href="Granny.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/granny.webp?updatedAt=1757976162194')"></div>
-      <div class="content">
-        <h3>Granny</h3>
-        <p class="muted">Granny is a horror game where you must escape from a creepy house while avoiding the clutches of a terrifying grandmother.</p>
-        <div class="badges">
-          <span class="badge">Horror</span>
-          <span class="badge">Adventure</span>
-          <span class="badge">Puzzle</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Deltarune.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/deltarune-2.jpeg?updatedAt=1758078434063')"></div>
-      <div class="content">
-        <h3>Deltarune</h3>
-        <p class="muted">Deltarune is a role-playing video game created by Toby Fox. It is a follow-up to the critically acclaimed game Undertale and features similar gameplay mechanics and storytelling elements.</p>
-        <div class="badges">
-          <span class="badge">Role-playing</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="That's Not My Neighbor.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/thats-not0my0neighbor.jpg?updatedAt=1757976162098')"></div>
-      <div class="content">
-        <h3>That's Not My Neighbor</h3>
-        <p class="muted">That's Not My Neighbor is a job simulator with science fiction elements and a slightly eerie aesthetic that will test your sense of observation.</p>
-        <div class="badges">
-          <span class="badge">Simulation</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Hollow Knight.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/Hollow_Knight.webp?updatedAt=1757976162937')"></div>
-      <div class="content">
-        <h3>Hollow Knight</h3>
-        <p class="muted">Hollow Knight is a critically acclaimed action-adventure game set in a beautifully hand-drawn, dark fantasy world. Players explore the vast, interconnected kingdom of Hallownest, battling challenging foes and uncovering the mysteries of the fallen kingdom.</p>
-        <div class="badges">
-          <span class="badge">Metroidvania</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Fighting</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Endoparasitic.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/endoparasitic.jpg?updatedAt=1757976162041')"></div>
-      <div class="content">
-        <h3>Endoparasitic</h3>
-        <p class="muted">Endoparasitic is a unique action-adventure game that combines elements of horror and exploration. Players navigate a surreal world filled with strange creatures and challenging puzzles, all while uncovering the dark secrets of their own existence.</p>
-        <div class="badges">
-          <span class="badge">Shooter</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Adventure</span>
-          <span class="badge">Blood</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Undertale.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/undertale_LYJRI6wtG.png?updatedAt=1758078434141')"></div>
-      <div class="content">
-        <h3>Undertale</h3>
-        <p class="muted">Undertale is a unique RPG that subverts traditional gameplay mechanics. Players navigate a world filled with quirky characters and moral dilemmas, where every choice matters and the outcome is never what it seems.</p>
-        <div class="badges">
-          <span class="badge">Adventure</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Undertale Yellowhtml" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/download%20(22).jpeg?updatedAt=1758078434071')"></div>
-      <div class="content">
-        <h3>Undertale Yellow</h3>
-        <p class="muted">Undertale Yellow is a role-playing video game released on Game Jolt for Microsoft Windows on December 9, 2023. Developed by Team Undertale Yellow as a fan-made prequel to Undertale, the game follows the last human who falls into the underground before Frisk, a child named Clover, who possesses the yellow soul from Undertale, as they journey on an unfamiliar path to the surface after entering the monster-inhabited Underground.</p>
-        <div class="badges">
-          <span class="badge">Role-playing</span>
-          <span class="badge">Indie</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Five Nights at Freddy's.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/FNaF1.webp?updatedAt=1757976162387')"></div>
-      <div class="content">
-        <h3>Five Nights at Freddy's</h3>
-        <p class="muted">In Five Nights at Freddy's, players must survive the night while being hunted by animatronic characters. Use cameras and limited resources to stay alive and uncover the dark secrets of Freddy Fazbear's Pizza.</p>
-        <div class="badges">
-          <span class="badge">Horror</span>
-          <span class="badge">Survival</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Class of '09.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/class-of-09-1sgdv.png')"></div>
-      <div class="content">
-        <h3>Class of 09</h3>
-        <p class="muted">In Class of 09, players navigate a world filled with quirky characters and moral dilemmas, where every choice matters and the outcome is never what it seems.</p>
-        <div class="badges">
-          <span class="badge">Visual novel</span>
-          <span class="badge">Role-playing</span>
-          <span class="badge">Frequent Gore</span>
-        </div>
-      </div>
-    </a>
-  </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Bendy and the Ink Machine.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/Sh1mShenanigans/LunarClient/download%20(24).jpeg?updatedAt=1758078434133')"></div>
-      <div class="content">
-        <h3>Bendy and the Ink Machine</h3>
-        <p class="muted">In Bendy and the Ink Machine, players must navigate a dark and twisted world filled with ink monsters and puzzles. Uncover the secrets of the studio and survive the horrors within.</p>
-        <div class="badges">
-          <span class="badge">Horror</span>
-          <span class="badge">Survival</span>
-          <span class="badge">Action</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="cldokidokiliteratureclub (1).html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/ddlc.webp?updatedAt=1758235240287')"></div>
-      <div class="content">
-        <h3>Doki Doki Literature Club</h3>
-        <p class="muted">In Doki Doki Literature Club, players join a literature club filled with cute girls, but things quickly take a dark turn. Unravel the mysteries behind the club and its members in this psychological horror visual novel.</p>
-        <div class="badges">
-          <span class="badge">Horror</span>
-          <span class="badge">Visual novel</span>
-          <span class="badge">Psychological</span>
-        </div>
-      </div>
-    </a>
-    <a class="card project fade-in fade-in-delay-2" href="Cuphead.html" target="_blank" rel="noopener">
-      <div class="thumb" style="background-image:url('https://ik.imagekit.io/yeahblxr/Games/Cuphead.png?updatedAt=1757976163811')"></div>
-      <div class="content">
-        <h3>Cuphead</h3>
-        <p class="muted">Cuphead is a 2017 indie run and gun game developed and published by Studio MDHR. The game follows its titular teacup-headed character and his brother Mugman, as they make a deal with the Devil to pay casino losses by repossessing the souls of runaway debtors.</p>
-        <div class="badges">
-          <span class="badge">Indie</span>
-          <span class="badge">Action</span>
-          <span class="badge">Platformer</span>
-        </div>
-      </div>
-</section>
-
+    </section>
 
     <section id="about">
       <div class="cards">
