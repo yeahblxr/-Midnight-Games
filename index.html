@@ -811,19 +811,6 @@
           window.open(gameFile, '_blank');
         }
       });
-    }, observerOptions);
-    
-    // Observe all elements with fade-in class
-    document.querySelectorAll('.fade-in').forEach(el => {
-      observer.observe(el);
-    });
-    document.querySelectorAll('.game-card').forEach(card => {
-      card.addEventListener('click', function() {
-        const gameFile = card.getAttribute('data-game');
-        if (gameFile) {
-          window.open(gameFile, '_blank');
-        }
-      });
     });
     // Game search functionality
 document.getElementById('gameSearch').addEventListener('input', function() {
